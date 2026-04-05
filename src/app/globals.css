@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@layer base {
+  body {
+    @apply bg-surface-1 text-slate-900 font-sans antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl border border-slate-200 shadow-sm;
+  }
+  .card-header {
+    @apply px-6 py-4 border-b border-slate-100 flex items-center justify-between;
+  }
+  .card-body {
+    @apply px-6 py-4;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-info { @apply bg-blue-50 text-blue-700; }
+  .badge-warning { @apply bg-amber-50 text-amber-700; }
+  .badge-critical { @apply bg-red-50 text-red-700; }
+  .badge-emergency { @apply bg-red-100 text-red-900 font-semibold; }
+  .badge-online { @apply bg-emerald-50 text-emerald-700; }
+  .badge-offline { @apply bg-slate-100 text-slate-600; }
+  .kpi-value {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+  .kpi-label {
+    @apply text-xs font-medium text-slate-500 uppercase tracking-wider;
+  }
+  .page-title {
+    @apply text-2xl font-semibold text-slate-900;
+  }
+  .section-title {
+    @apply text-lg font-semibold text-slate-800;
+  }
+}
