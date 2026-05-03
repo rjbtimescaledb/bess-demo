@@ -1,0 +1,358 @@
+<mxfile host="app.diagrams.net" agent="Claude">
+  <diagram name="BESS Demo Architecture" id="bess-arch-v2">
+    <mxGraphModel dx="2400" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1500" math="0" shadow="0" background="#1a1a2e" backgroundImage="none">
+      <root>
+        <mxCell id="0" style="background=#1a1a2e;" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ==================== TITLE BAR ==================== -->
+        <mxCell id="title_bar" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;strokeWidth=1;" value="" vertex="1">
+          <mxGeometry x="0" y="0" width="2400" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="title_logo" parent="1" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 10px; color: #888;&quot;&gt;BESS Demo&lt;/font&gt;" vertex="1">
+          <mxGeometry x="20" y="10" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="title_text" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 22px; color: #e0e0e0;&quot;&gt;&lt;b&gt;Statnett Reference Architecture with TimescaleDB&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px; color: #888;&quot;&gt;Real-time telemetry ingestion, analytics, and data lifecycle — &quot;Dario's Battery Farm&quot;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="600" y="10" width="600" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_edge" parent="1" style="text;html=1;align=right;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 9px; color: #53d769;&quot;&gt;EDGE&lt;/font&gt;&lt;font style=&quot;font-size: 9px; color: #888;&quot;&gt; = at-site collection &amp;nbsp;|&amp;nbsp; &lt;/font&gt;&lt;font style=&quot;font-size: 9px; color: #4fc3f7;&quot;&gt;CLOUD&lt;/font&gt;&lt;font style=&quot;font-size: 9px; color: #888;&quot;&gt; = eu-central-1 &amp;nbsp;|&amp;nbsp; &lt;/font&gt;&lt;font style=&quot;font-size: 9px; color: #ff7043;&quot;&gt;APP&lt;/font&gt;&lt;font style=&quot;font-size: 9px; color: #888;&quot;&gt; = Vercel fra1&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1800" y="15" width="580" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COLUMN HEADERS ==================== -->
+        <mxCell id="col1_hdr" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 13px; color: #aaa;&quot;&gt;&lt;b&gt;Data Sources&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="30" y="80" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col2_hdr" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 13px; color: #aaa;&quot;&gt;&lt;b&gt;Edge / Simulator&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="320" y="80" width="250" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col3_hdr" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 13px; color: #aaa;&quot;&gt;&lt;b&gt;Tiger Cloud (TimescaleDB)&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="620" y="80" width="580" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col4_hdr" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 13px; color: #aaa;&quot;&gt;&lt;b&gt;Query Patterns&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1240" y="80" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col5_hdr" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 13px; color: #aaa;&quot;&gt;&lt;b&gt;Applications&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1480" y="80" width="220" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="col6_hdr" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 13px; color: #aaa;&quot;&gt;&lt;b&gt;Analytics / ML&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1740" y="80" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Column separators -->
+        <mxCell id="sep1" parent="1" style="endArrow=none;strokeColor=#333;strokeWidth=1;dashed=1;dashPattern=3 3;" edge="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="300" y="105" as="sourcePoint" /><mxPoint x="300" y="1450" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="sep2" parent="1" style="endArrow=none;strokeColor=#333;strokeWidth=1;dashed=1;dashPattern=3 3;" edge="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="600" y="105" as="sourcePoint" /><mxPoint x="600" y="1450" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="sep3" parent="1" style="endArrow=none;strokeColor=#333;strokeWidth=1;dashed=1;dashPattern=3 3;" edge="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1220" y="105" as="sourcePoint" /><mxPoint x="1220" y="1450" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="sep4" parent="1" style="endArrow=none;strokeColor=#333;strokeWidth=1;dashed=1;dashPattern=3 3;" edge="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1460" y="105" as="sourcePoint" /><mxPoint x="1460" y="1450" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="sep5" parent="1" style="endArrow=none;strokeColor=#333;strokeWidth=1;dashed=1;dashPattern=3 3;" edge="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1720" y="105" as="sourcePoint" /><mxPoint x="1720" y="1450" as="targetPoint" /></mxGeometry>
+        </mxCell>
+
+        <!-- ==================== COL 1: DATA SOURCES ==================== -->
+        <mxCell id="ds_grid" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1b4332;strokeColor=#40916c;strokeWidth=2;arcSize=10;fontSize=11;" value="&lt;font color=&quot;#95d5b2&quot;&gt;&lt;b&gt;Grid Telemetry&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px; color: #aaa;&quot;&gt;200 Battery Containers&lt;br&gt;400 PCS Inverters&lt;br&gt;1,200 Battery Racks&lt;br&gt;&lt;b&gt;10s intervals per asset&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="120" width="220" height="95" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ds_bms" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1b4332;strokeColor=#40916c;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#95d5b2&quot;&gt;&lt;b&gt;Battery BMS&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;SoC, SoH, Cell Voltages&lt;br&gt;Rack Temps, Alarms&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="230" width="105" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ds_pcs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1b4332;strokeColor=#40916c;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#95d5b2&quot;&gt;&lt;b&gt;PCS / Inverter&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;Power, Frequency&lt;br&gt;Grid Voltage, RTE&lt;/font&gt;" vertex="1">
+          <mxGeometry x="155" y="230" width="105" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ds_thermal" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1b4332;strokeColor=#40916c;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#95d5b2&quot;&gt;&lt;b&gt;HVAC / Thermal&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;Ambient Temp&lt;br&gt;Humidity, Cooling&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="305" width="105" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ds_meter" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1b4332;strokeColor=#40916c;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#95d5b2&quot;&gt;&lt;b&gt;Grid Meter&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;Import/Export kW&lt;br&gt;Revenue Meter&lt;/font&gt;" vertex="1">
+          <mxGeometry x="155" y="305" width="105" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ds_market" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3e2723;strokeColor=#ff8f00;strokeWidth=2;arcSize=10;fontSize=11;" value="&lt;font color=&quot;#ffcc80&quot;&gt;&lt;b&gt;Market/Pricing Data&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px; color: #aaa;&quot;&gt;ISO/RTO LMP Prices&lt;br&gt;CAISO | ERCOT | PJM&lt;br&gt;5-min intervals&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="395" width="220" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ds_dispatch" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a237e;strokeColor=#5c6bc0;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#9fa8da&quot;&gt;&lt;b&gt;Dispatch Commands&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;Charge/Discharge schedules&lt;br&gt;Frequency regulation&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="490" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ds_fleet" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#263238;strokeColor=#546e7a;strokeWidth=1;arcSize=10;fontSize=10;dashed=1;" value="&lt;font color=&quot;#b0bec5&quot;&gt;&lt;b&gt;Fleet Reference Data&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#888&quot;&gt;10 Sites | 200 Assets | 400 Inverters | 1,200 Racks&lt;br&gt;2,080 MW / 8,320 MWh total capacity&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="570" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COL 2: EDGE / SIMULATOR ==================== -->
+        <mxCell id="sim_zone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a1a2e;strokeColor=#e65100;strokeWidth=2;arcSize=6;dashed=1;dashPattern=5 3;" value="" vertex="1">
+          <mxGeometry x="320" y="110" width="260" height="530" as="geometry" />
+        </mxCell>
+        <mxCell id="sim_zone_label" parent="1" style="text;html=1;align=center;verticalAlign=top;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 10px; color: #ff8a65;&quot;&gt;&lt;b&gt;Fly.io — Frankfurt (fra)&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="370" y="115" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sim_writer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bf360c;strokeColor=#ff6e40;strokeWidth=2;arcSize=10;fontSize=11;" value="&lt;font color=&quot;#ffccbc&quot;&gt;&lt;b&gt;Writer Process&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px; color: #ccc;&quot;&gt;2,500 rows/sec&lt;br&gt;Per-asset telemetry&lt;br&gt;COPY protocol&lt;/font&gt;" vertex="1">
+          <mxGeometry x="340" y="145" width="220" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sim_reader" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bf360c;strokeColor=#ff6e40;strokeWidth=1;arcSize=10;fontSize=11;" value="&lt;font color=&quot;#ffccbc&quot;&gt;&lt;b&gt;Load Test Reader&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px; color: #ccc;&quot;&gt;12 simulated users&lt;br&gt;1s think time, 24/7&lt;/font&gt;" vertex="1">
+          <mxGeometry x="340" y="235" width="220" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sim_backfill" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bf360c;strokeColor=#ff6e40;strokeWidth=1;arcSize=10;fontSize=11;" value="&lt;font color=&quot;#ffccbc&quot;&gt;&lt;b&gt;Backfill Engine&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px; color: #ccc;&quot;&gt;COPY-based, chunked&lt;br&gt;Tiered resolution (10s→120s)&lt;/font&gt;" vertex="1">
+          <mxGeometry x="340" y="315" width="220" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sim_generator" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4a148c;strokeColor=#ce93d8;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#e1bee7&quot;&gt;&lt;b&gt;BESSSimulator&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;Realistic physics model&lt;br&gt;Telemetry + Alarms + Dispatch&lt;br&gt;+ Market + Maintenance&lt;/font&gt;" vertex="1">
+          <mxGeometry x="340" y="400" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mqtt_label" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#263238;strokeColor=#455a64;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#90a4ae&quot;&gt;&lt;b&gt;MQTT / Kafka&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#777&quot;&gt;(simulated by direct COPY)&lt;/font&gt;" vertex="1">
+          <mxGeometry x="340" y="490" width="220" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Source → Sim arrows -->
+        <mxCell id="arr_ds_sim1" parent="1" style="rounded=1;strokeColor=#40916c;strokeWidth=2;exitX=1;exitY=0.3;entryX=0;entryY=0.4;" edge="1" source="ds_grid" target="sim_writer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_ds_sim2" parent="1" style="rounded=1;strokeColor=#ff8f00;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="ds_market" target="sim_generator">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COL 3: TIGER CLOUD ==================== -->
+        <mxCell id="tc_zone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a1a2e;strokeColor=#4fc3f7;strokeWidth=2;arcSize=6;dashed=1;dashPattern=5 3;" value="" vertex="1">
+          <mxGeometry x="620" y="110" width="580" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="tc_zone_label" parent="1" style="text;html=1;align=center;verticalAlign=top;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 10px; color: #4fc3f7;&quot;&gt;&lt;b&gt;Tiger Cloud — eu-central-1 (Frankfurt) | 4 CPU / 16 GB | PostgreSQL 18.3 + TimescaleDB&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="680" y="115" width="480" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Hypertables -->
+        <mxCell id="ht_label" parent="1" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 11px; color: #4fc3f7;&quot;&gt;&lt;b&gt;Hypertables&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="640" y="140" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ht_telemetry" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#0d47a1;strokeColor=#42a5f5;strokeWidth=2;fontSize=10;" value="&lt;font color=&quot;#90caf9&quot;&gt;&lt;b&gt;telemetry_raw&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;~6.6B rows&lt;br&gt;1-day chunks&lt;/font&gt;" vertex="1">
+          <mxGeometry x="640" y="165" width="140" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="ht_alarms" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#0d47a1;strokeColor=#42a5f5;strokeWidth=1;fontSize=10;" value="&lt;font color=&quot;#90caf9&quot;&gt;&lt;b&gt;alarms_events&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;7-day chunks&lt;/font&gt;" vertex="1">
+          <mxGeometry x="800" y="165" width="120" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ht_dispatch" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#0d47a1;strokeColor=#42a5f5;strokeWidth=1;fontSize=10;" value="&lt;font color=&quot;#90caf9&quot;&gt;&lt;b&gt;dispatch_commands&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;7-day chunks&lt;/font&gt;" vertex="1">
+          <mxGeometry x="940" y="165" width="130" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ht_market" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#0d47a1;strokeColor=#42a5f5;strokeWidth=1;fontSize=10;" value="&lt;font color=&quot;#90caf9&quot;&gt;&lt;b&gt;market_price_signals&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;1-day chunks&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1080" y="165" width="110" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Sim → Tiger arrows -->
+        <mxCell id="arr_sim_tc" parent="1" style="rounded=1;strokeColor=#ff6e40;strokeWidth=3;exitX=1;exitY=0.4;entryX=0;entryY=0.4;" edge="1" source="sim_writer" target="ht_telemetry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_sim_tc_lbl" parent="1" style="text;html=1;align=center;fontSize=9;fontColor=#ff8a65;fontStyle=1;" value="COPY 2.5K/sec" vertex="1">
+          <mxGeometry x="587" y="175" width="90" height="15" as="geometry" />
+        </mxCell>
+
+        <!-- Continuous Aggregates -->
+        <mxCell id="cagg_zone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a1a2e;strokeColor=#7c4dff;strokeWidth=1;arcSize=6;dashed=1;dashPattern=4 3;" value="" vertex="1">
+          <mxGeometry x="635" y="260" width="555" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="cagg_label" parent="1" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 10px; color: #b388ff;&quot;&gt;&lt;b&gt;Continuous Aggregates (hierarchical)&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="645" y="265" width="250" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cagg_1min" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#311b92;strokeColor=#b388ff;strokeWidth=2;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#d1c4e9&quot;&gt;&lt;b&gt;telemetry_1min&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;real-time CAGG&lt;/font&gt;" vertex="1">
+          <mxGeometry x="650" y="290" width="120" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="cagg_15min" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#311b92;strokeColor=#b388ff;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#d1c4e9&quot;&gt;&lt;b&gt;telemetry_15min&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;materialized&lt;/font&gt;" vertex="1">
+          <mxGeometry x="790" y="290" width="120" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="cagg_1hr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#311b92;strokeColor=#b388ff;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#d1c4e9&quot;&gt;&lt;b&gt;telemetry_1hour&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;materialized&lt;/font&gt;" vertex="1">
+          <mxGeometry x="930" y="290" width="120" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="cagg_alarms" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#311b92;strokeColor=#b388ff;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#d1c4e9&quot;&gt;&lt;b&gt;alarms_hourly&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;materialized&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1060" y="290" width="120" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- CAGG cascade arrows -->
+        <mxCell id="arr_raw_1min" parent="1" style="rounded=1;strokeColor=#b388ff;strokeWidth=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="ht_telemetry" target="cagg_1min">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_1min_15" parent="1" style="rounded=1;strokeColor=#b388ff;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="cagg_1min" target="cagg_15min">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_15_1hr" parent="1" style="rounded=1;strokeColor=#b388ff;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="cagg_15min" target="cagg_1hr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_alm_cagg" parent="1" style="rounded=1;strokeColor=#b388ff;strokeWidth=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="ht_alarms" target="cagg_alarms">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Columnstore Compression -->
+        <mxCell id="comp_zone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a1a2e;strokeColor=#00897b;strokeWidth=1;arcSize=6;dashed=1;dashPattern=4 3;" value="" vertex="1">
+          <mxGeometry x="635" y="400" width="555" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_label" parent="1" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 10px; color: #4db6ac;&quot;&gt;&lt;b&gt;Columnstore Compression&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="645" y="405" width="200" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="comp_segby" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#004d40;strokeColor=#26a69a;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#80cbc4&quot;&gt;&lt;b&gt;segmentby&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;site_id, asset_id&lt;br&gt;200 segments/chunk&lt;/font&gt;" vertex="1">
+          <mxGeometry x="650" y="430" width="130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_orderby" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#004d40;strokeColor=#26a69a;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#80cbc4&quot;&gt;&lt;b&gt;orderby&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;ts DESC&lt;br&gt;delta + gorilla encoding&lt;/font&gt;" vertex="1">
+          <mxGeometry x="800" y="430" width="130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_stats" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#004d40;strokeColor=#26a69a;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#80cbc4&quot;&gt;&lt;b&gt;Batch Size&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;1,000 rows/batch&lt;br&gt;Target: 90%+ compression&lt;/font&gt;" vertex="1">
+          <mxGeometry x="950" y="430" width="130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_policy" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#004d40;strokeColor=#26a69a;strokeWidth=1;arcSize=8;fontSize=10;" value="&lt;font color=&quot;#80cbc4&quot;&gt;&lt;b&gt;Compress after 1 day&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;Hourly policy check&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1100" y="430" width="80" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Data Lifecycle / Tiering -->
+        <mxCell id="tier_zone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a1a2e;strokeColor=#0277bd;strokeWidth=1;arcSize=6;dashed=1;dashPattern=4 3;" value="" vertex="1">
+          <mxGeometry x="635" y="550" width="555" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="tier_label" parent="1" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 10px; color: #4fc3f7;&quot;&gt;&lt;b&gt;Data Lifecycle&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="645" y="555" width="100" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tier_hot" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b71c1c;strokeColor=#ef5350;strokeWidth=2;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#ffcdd2&quot;&gt;&lt;b&gt;Rowstore&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;Last 1 day&lt;br&gt;Fast inserts&lt;/font&gt;" vertex="1">
+          <mxGeometry x="650" y="580" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="tier_warm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e65100;strokeColor=#ff9800;strokeWidth=2;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#ffe0b2&quot;&gt;&lt;b&gt;Columnstore&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;1 day → 3 months&lt;br&gt;90%+ compressed&lt;/font&gt;" vertex="1">
+          <mxGeometry x="800" y="580" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="tier_cold" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#01579b;strokeColor=#29b6f6;strokeWidth=2;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#b3e5fc&quot;&gt;&lt;b&gt;S3 Tiering&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;3 months+&lt;br&gt;Object storage&lt;/font&gt;" vertex="1">
+          <mxGeometry x="950" y="580" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="tier_drop" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#263238;strokeColor=#546e7a;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#90a4ae&quot;&gt;&lt;b&gt;Retention&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#888&quot;&gt;6 months&lt;br&gt;Auto-drop&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1100" y="580" width="80" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_hot_warm" parent="1" style="rounded=1;strokeColor=#ff9800;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="tier_hot" target="tier_warm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_warm_cold" parent="1" style="rounded=1;strokeColor=#29b6f6;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="tier_warm" target="tier_cold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_cold_drop" parent="1" style="rounded=1;strokeColor=#546e7a;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="tier_cold" target="tier_drop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Reference Tables -->
+        <mxCell id="ref_tables" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a237e;strokeColor=#5c6bc0;strokeWidth=1;arcSize=8;fontSize=10;" value="&lt;font color=&quot;#9fa8da&quot;&gt;&lt;b&gt;Reference Tables&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;organizations | sites | battery_assets | pcs_inverters | battery_racks&lt;/font&gt;" vertex="1">
+          <mxGeometry x="635" y="690" width="555" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Automation policies -->
+        <mxCell id="policies" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#212121;strokeColor=#616161;strokeWidth=1;arcSize=8;fontSize=9;dashed=1;" value="&lt;font color=&quot;#bdbdbd&quot;&gt;&lt;b&gt;Automation:&lt;/b&gt; CAGG refresh (1min) | Compression policy (hourly) | S3 tiering (hourly) | Retention (daily)&lt;/font&gt;" vertex="1">
+          <mxGeometry x="635" y="740" width="555" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COL 4: QUERY PATTERNS ==================== -->
+        <mxCell id="qp_realtime" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1b5e20;strokeColor=#66bb6a;strokeWidth=2;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#a5d6a7&quot;&gt;&lt;b&gt;Real-time Queries&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;DISTINCT ON (site_id)&lt;br&gt;Last 10 min from CAGG&lt;br&gt;&lt;b&gt;~50ms&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1240" y="120" width="200" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="qp_agg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0d47a1;strokeColor=#42a5f5;strokeWidth=2;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#90caf9&quot;&gt;&lt;b&gt;Aggregation Queries&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;time_bucket() on CAGGs&lt;br&gt;7d/30d history&lt;br&gt;&lt;b&gt;~140-250ms&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1240" y="210" width="200" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="qp_analytics" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4a148c;strokeColor=#ce93d8;strokeWidth=2;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#e1bee7&quot;&gt;&lt;b&gt;Decision-Support&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;Dispatch readiness&lt;br&gt;Revenue opportunity&lt;br&gt;Missed revenue&lt;br&gt;&lt;b&gt;~250-400ms&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1240" y="300" width="200" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="qp_operational" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3e2723;strokeColor=#8d6e63;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#bcaaa4&quot;&gt;&lt;b&gt;Operational Queries&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;Alarms, dispatches&lt;br&gt;Maintenance logs&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1240" y="400" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Tiger → Query arrows -->
+        <mxCell id="arr_tc_qp1" parent="1" style="rounded=1;strokeColor=#4fc3f7;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="cagg_1min" target="qp_realtime">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_tc_qp2" parent="1" style="rounded=1;strokeColor=#4fc3f7;strokeWidth=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="cagg_1hr" target="qp_agg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COL 5: APPLICATIONS ==================== -->
+        <mxCell id="app_nextjs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#006064;strokeColor=#00bcd4;strokeWidth=2;arcSize=10;fontSize=11;" value="&lt;font color=&quot;#b2ebf2&quot;&gt;&lt;b&gt;Next.js 15 Dashboard&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px; color: #ccc;&quot;&gt;App Router | Tailwind | Recharts&lt;br&gt;bess-demo.vercel.app&lt;br&gt;Vercel fra1 (Frankfurt)&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1480" y="120" width="220" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_pages" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#004d40;strokeColor=#26a69a;strokeWidth=1;arcSize=8;fontSize=10;" value="&lt;font color=&quot;#80cbc4&quot;&gt;&lt;b&gt;Dashboard&lt;/b&gt; | &lt;b&gt;Operations&lt;/b&gt;&lt;br&gt;&lt;b&gt;Sites&lt;/b&gt; | &lt;b&gt;Alarms&lt;/b&gt; | &lt;b&gt;Dispatch&lt;/b&gt;&lt;br&gt;&lt;b&gt;Assets&lt;/b&gt; | &lt;b&gt;Platform&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1480" y="215" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_v2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#004d40;strokeColor=#26a69a;strokeWidth=1;arcSize=8;fontSize=10;" value="&lt;font color=&quot;#80cbc4&quot;&gt;&lt;b&gt;V2 Decision-Support&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#aaa&quot;&gt;Dispatch readiness scoring&lt;br&gt;Revenue opportunity analysis&lt;br&gt;Missed revenue tracking&lt;br&gt;Executive summary&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1480" y="285" width="220" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Query → App arrows -->
+        <mxCell id="arr_qp_app" parent="1" style="rounded=1;strokeColor=#00bcd4;strokeWidth=2;exitX=1;exitY=0.5;entryX=0;entryY=0.3;" edge="1" source="qp_realtime" target="app_nextjs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== COL 6: ANALYTICS / ML ==================== -->
+        <mxCell id="an_grafana" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e65100;strokeColor=#ff9800;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#ffe0b2&quot;&gt;&lt;b&gt;Grafana&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;Monitoring dashboards&lt;br&gt;Alert rules&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1740" y="120" width="150" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="an_bi" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1565c0;strokeColor=#42a5f5;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#90caf9&quot;&gt;&lt;b&gt;BI / Reporting&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;Revenue analytics&lt;br&gt;Fleet performance&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1740" y="190" width="150" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="an_ml" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4a148c;strokeColor=#ce93d8;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#e1bee7&quot;&gt;&lt;b&gt;ML / Forecasting&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;SoH degradation&lt;br&gt;Price prediction&lt;br&gt;Anomaly detection&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1740" y="260" width="150" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="an_datalake" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#01579b;strokeColor=#0288d1;strokeWidth=1;arcSize=10;fontSize=10;" value="&lt;font color=&quot;#b3e5fc&quot;&gt;&lt;b&gt;Data Lifecycle&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;S3 tiered archive&lt;br&gt;Parquet export&lt;br&gt;Long-term compliance&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1740" y="340" width="150" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RDS BENCHMARK (bottom) ==================== -->
+        <mxCell id="rds_zone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a1a2e;strokeColor=#ef5350;strokeWidth=2;arcSize=6;dashed=1;dashPattern=5 3;" value="" vertex="1">
+          <mxGeometry x="620" y="790" width="780" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="rds_label" parent="1" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];strokeColor=none;fillColor=none;" value="&lt;font style=&quot;font-size: 11px; color: #ef5350;&quot;&gt;&lt;b&gt;RDS Benchmark Comparison&lt;/b&gt;&lt;font style=&quot;font-size: 10px; color: #888;&quot;&gt; — Same spec, vanilla PostgreSQL, no TimescaleDB&lt;/font&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="635" y="795" width="500" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rds_instance" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#b71c1c;strokeColor=#ef5350;strokeWidth=2;fontSize=10;" value="&lt;font color=&quot;#ffcdd2&quot;&gt;&lt;b&gt;RDS PostgreSQL 18.3&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;db.m5.xlarge (4 vCPU, 16G)&lt;br&gt;eu-central-1 (Frankfurt)&lt;br&gt;gp3 storage&lt;/font&gt;" vertex="1">
+          <mxGeometry x="650" y="825" width="160" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rds_missing" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#311b92;strokeColor=#7c4dff;strokeWidth=1;arcSize=8;fontSize=10;" value="&lt;font color=&quot;#ef9a9a&quot;&gt;&lt;b&gt;Missing vs Tiger Cloud&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;No hypertables | No CAGGs&lt;br&gt;No columnstore compression&lt;br&gt;No automatic partitioning&lt;br&gt;No S3 tiering | No time_bucket()&lt;/font&gt;" vertex="1">
+          <mxGeometry x="840" y="825" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rds_results" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1b5e20;strokeColor=#66bb6a;strokeWidth=2;arcSize=8;fontSize=10;" value="&lt;font color=&quot;#a5d6a7&quot;&gt;&lt;b&gt;Benchmark Results&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#ccc&quot;&gt;Fleet queries: &lt;b&gt;Tiger 20-30x faster&lt;/b&gt;&lt;br&gt;Aggregation: &lt;b&gt;Tiger 14-35x faster&lt;/b&gt;&lt;br&gt;Storage: &lt;b&gt;No compression (22 GB vs compressed)&lt;/b&gt;&lt;br&gt;TCO: &lt;b&gt;$147K-$261K for 3yr @ 3K rows/sec&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="1070" y="820" width="310" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- vs arrow -->
+        <mxCell id="arr_vs" parent="1" style="rounded=1;strokeColor=#ef5350;strokeWidth=2;dashed=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" source="rds_instance" target="ht_telemetry">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="730" y="810" />
+              <mxPoint x="710" y="810" />
+              <mxPoint x="710" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr_vs_lbl" parent="1" style="text;html=1;align=center;fontSize=10;fontColor=#ef5350;fontStyle=1;fillColor=#1a1a2e;" value="vs" vertex="1">
+          <mxGeometry x="698" y="770" width="25" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== SITE LIST (bottom left) ==================== -->
+        <mxCell id="sites_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#212121;strokeColor=#424242;strokeWidth=1;arcSize=6;fontSize=9;" value="&lt;font color=&quot;#bdbdbd&quot;&gt;&lt;b&gt;10 BESS Sites:&lt;/b&gt; Mojave (200MW) | Texas Grid (300MW) | PJM East (150MW) | Desert Peak (100MW) | Gulf Coast (250MW) | Arizona Sun (250MW) | Carolinas (150MW) | Great Plains (200MW) | Pacific NW (180MW) | Florida (300MW) — &lt;b&gt;Total: 2,080 MW / 8,320 MWh&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry x="20" y="1000" width="1380" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

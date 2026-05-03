@@ -175,6 +175,27 @@ export interface PlatformStats {
   hypertable_count: number;
 }
 
+export interface AssetHealthRow {
+  site_name: string;
+  soh_current_pct: number;
+  soh_last_week_pct: number;
+  soh_month_ago_pct: number;
+  degradation_30d_pct: number;
+  projected_annual_degradation_pct: number;
+  health_status: 'CRITICAL' | 'WATCH' | 'NORMAL';
+}
+
+export interface FleetUtilizationRow {
+  site_name: string;
+  capacity_mw: number;
+  avg_power_mw: number;
+  utilization_pct: number;
+  avg_soc_pct: number;
+  avg_soh_pct: number;
+  avg_rte_pct: number;
+  datapoints: number;
+}
+
 export interface ApiResponse<T> {
   data: T;
   error?: string;
