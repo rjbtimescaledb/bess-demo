@@ -15,6 +15,7 @@ const RANGES = [
   { label: '24H', hours: 24 },
   { label: '7D', hours: 168 },
   { label: '30D', hours: 720 },
+  { label: '1Y', hours: 8760 },
 ];
 
 interface SiteDetailClientProps {
