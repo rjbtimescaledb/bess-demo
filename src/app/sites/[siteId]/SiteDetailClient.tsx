@@ -14,6 +14,7 @@ const RANGES = [
   { label: '12H', hours: 12 },
   { label: '24H', hours: 24 },
   { label: '7D', hours: 168 },
+  { label: '30D', hours: 720 },
 ];
 
 interface SiteDetailClientProps {
@@ -40,7 +41,9 @@ export function SiteDetailClient({ siteId }: SiteDetailClientProps) {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 10_000);
+    // Adaptive refresh: 5s for 1H, 15s for 4-12H, 30s for 24H+
+    const refreshMs = range <= 1 ? 5_000 : range <= 12 ? 15_000 : 30_000;
+    const interval = setInterval(fetchData, refreshMs);
     return () => clearInterval(interval);
   }, [fetchData]);
 
