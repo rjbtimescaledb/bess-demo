@@ -95,6 +95,19 @@ export async function insertMarketPrices(rows: unknown[][]) {
   await query(sql, rows.flat());
 }
 
+export async function batchInsertMaintenance(rows: unknown[][]) {
+  if (rows.length === 0) return;
+  const cols = 7;
+  const placeholders = rows.map((_, i) => {
+    const offset = i * cols;
+    return `(${Array.from({ length: cols }, (_, j) => `$${offset + j + 1}`).join(',')})`;
+  }).join(',');
+
+  const sql = `INSERT INTO maintenance_logs (ts, site_id, asset_id, log_type, description, technician, duration_hours)
+    VALUES ${placeholders}`;
+  await query(sql, rows.flat());
+}
+
 export async function close() {
   await pool.end();
 }

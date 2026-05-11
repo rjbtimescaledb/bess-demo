@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>BESS Query Pack v2 — Benchmark Results</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5/github-markdown-dark.min.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">BESS Query Pack v2 — Benchmark Results</h1>
+</header>
+<h1 id="bess-core-query-pack-v2-benchmark-results">BESS Core Query Pack
+v2 — Benchmark Results</h1>
+<p><strong>Date:</strong> 2026-05-03 <strong>Location:</strong>
+eu-central-1 (Frankfurt)</p>
+<h2 id="test-configuration">Test Configuration</h2>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 63%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Tiger Cloud</th>
+<th>RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Engine</strong></td>
+<td>PostgreSQL 18.3 + TimescaleDB</td>
+<td>PostgreSQL 18.3 (vanilla)</td>
+</tr>
+<tr>
+<td><strong>Compute</strong></td>
+<td>8 CPU / 32 GB</td>
+<td>db.m5.xlarge (4 vCPU / 16 GiB)</td>
+</tr>
+<tr>
+<td><strong>Region</strong></td>
+<td>eu-central-1</td>
+<td>eu-central-1</td>
+</tr>
+<tr>
+<td><strong>Telemetry rows</strong></td>
+<td>~6.6 billion</td>
+<td>~89 million</td>
+</tr>
+<tr>
+<td><strong>Concurrent ingest</strong></td>
+<td>2,500 rows/sec</td>
+<td>2,500 rows/sec</td>
+</tr>
+<tr>
+<td><strong>Concurrent readers</strong></td>
+<td>12 dashboard users</td>
+<td>12 dashboard users</td>
+</tr>
+<tr>
+<td><strong>Compression</strong></td>
+<td>Columnstore (segmentby site_id, asset_id)</td>
+<td>None</td>
+</tr>
+<tr>
+<td><strong>Continuous Aggregates</strong></td>
+<td>4 (1min → 15min → 1hour, alarms_hourly)</td>
+<td>None</td>
+</tr>
+<tr>
+<td><strong>S3 Tiering</strong></td>
+<td>After 3 months</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fleet-configuration">Fleet Configuration</h2>
+<ul>
+<li>10 BESS sites across the US</li>
+<li>200 battery containers (20 per site)</li>
+<li>400 PCS inverters, 1,200 battery racks</li>
+<li>2,080 MW / 8,320 MWh total fleet capacity</li>
+<li>LFP chemistry</li>
+</ul>
+<hr />
+<h2 id="query-results">Query Results</h2>
+<h3 id="category-1-operational">Category 1 — Operational</h3>
+<h4 id="q1a-latest-fleet-state">Q1A — Latest Fleet State</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;"><strong>~50ms</strong></td>
+<td style="text-align: center;">9,499ms</td>
+</tr>
+<tr>
+<td><strong>Speedup</strong></td>
+<td style="text-align: center;"><strong>190x faster</strong></td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">BESS Operator</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">What is happening across my fleet right
+now?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>TimescaleDB Feature</strong></td>
+<td style="text-align: center;">1-min Continuous Aggregate, DISTINCT
+ON</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Why RDS is slow</strong></td>
+<td style="text-align: center;">DISTINCT ON scans 89M raw rows to find
+latest per site</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="q1b-active-alarms-by-site">Q1B — Active Alarms by Site</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;">86ms</td>
+<td style="text-align: center;"><strong>47ms</strong></td>
+</tr>
+<tr>
+<td><strong>Result</strong></td>
+<td style="text-align: center;">~equal</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Reliability Engineer</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">What is broken right now and where?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Note</strong></td>
+<td style="text-align: center;">Small table (alarms), no advantage
+either way</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="category-2-historical-analytics">Category 2 — Historical
+Analytics</h3>
+<h4 id="q2a-power-trend-24h-per-site">Q2A — Power Trend (24h,
+per-site)</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;"><strong>60ms</strong></td>
+<td style="text-align: center;">941ms</td>
+</tr>
+<tr>
+<td><strong>Speedup</strong></td>
+<td style="text-align: center;"><strong>16x faster</strong></td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Operations Analyst</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">How has this site’s power output changed
+over 24 hours?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>TimescaleDB Feature</strong></td>
+<td style="text-align: center;">15-min Continuous Aggregate (96
+pre-computed rows)</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Why RDS is slow</strong></td>
+<td style="text-align: center;">Must aggregate 24h of raw telemetry with
+date_trunc</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="q2b-asset-health-degradation-30d">Q2B — Asset Health Degradation
+(30d)</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;"><strong>~150ms</strong></td>
+<td style="text-align: center;">67,450ms (67 seconds)</td>
+</tr>
+<tr>
+<td><strong>Speedup</strong></td>
+<td style="text-align: center;"><strong>450x faster</strong></td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Asset Manager</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">Which sites are degrading fastest? Is
+maintenance needed?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>TimescaleDB Feature</strong></td>
+<td style="text-align: center;">1-hour CAGG, time-windowed weekly SoH
+comparison</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Why RDS is slow</strong></td>
+<td style="text-align: center;">Scans 30 days of raw data across all
+assets — over a minute</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="category-3-dashboard">Category 3 — Dashboard</h3>
+<h4 id="q3a-multi-resolution-telemetry-7d">Q3A — Multi-Resolution
+Telemetry (7d)</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;"><strong>836ms</strong></td>
+<td style="text-align: center;">43,195ms (43 seconds)</td>
+</tr>
+<tr>
+<td><strong>Speedup</strong></td>
+<td style="text-align: center;"><strong>52x faster</strong></td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Dashboard End-User</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">Can I zoom from 30-day overview to
+1-minute detail seamlessly?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>TimescaleDB Feature</strong></td>
+<td style="text-align: center;">Hierarchical CAGGs: raw → 1min → 15min →
+1hour</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Why RDS is slow</strong></td>
+<td style="text-align: center;">No pre-computed rollups — scans 7 days
+of raw data</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="q3b-fleet-utilization-ranking-24h">Q3B — Fleet Utilization
+Ranking (24h)</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;"><strong>645ms</strong></td>
+<td style="text-align: center;">40,033ms (40 seconds)</td>
+</tr>
+<tr>
+<td><strong>Speedup</strong></td>
+<td style="text-align: center;"><strong>62x faster</strong></td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Operations Lead</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">Which sites are performing best? Where
+should I focus?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>TimescaleDB Feature</strong></td>
+<td style="text-align: center;">15-min CAGG, fleet-wide aggregation +
+ranking</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Why RDS is slow</strong></td>
+<td style="text-align: center;">Aggregates all sites × 24h of raw
+data</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="category-4-decisioning">Category 4 — Decisioning</h3>
+<h4 id="q4a-dispatch-readiness-scored">Q4A — Dispatch Readiness
+(scored)</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;"><strong>~100ms</strong></td>
+<td style="text-align: center;">3,227ms</td>
+</tr>
+<tr>
+<td><strong>Speedup</strong></td>
+<td style="text-align: center;"><strong>32x faster</strong></td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Energy Trader / Dispatch Operator</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">Which sites can I dispatch right now?
+How confident am I?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>TimescaleDB Feature</strong></td>
+<td style="text-align: center;">Real-time CAGG + alarms cross-join,
+readiness scoring</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Why RDS is slow</strong></td>
+<td style="text-align: center;">DISTINCT ON across raw table + alarm
+join</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="q4b-revenue-opportunity-real-time">Q4B — Revenue Opportunity
+(real-time)</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;"><strong>~100ms</strong></td>
+<td style="text-align: center;">2,265ms</td>
+</tr>
+<tr>
+<td><strong>Speedup</strong></td>
+<td style="text-align: center;"><strong>23x faster</strong></td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Energy Trader</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">Where is the money right now? Which
+sites should dispatch?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>TimescaleDB Feature</strong></td>
+<td style="text-align: center;">CAGG + market prices cross-join</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Why RDS is slow</strong></td>
+<td style="text-align: center;">Raw table scan + market price join</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="category-5-revenue-analytics-platform">Category 5 — Revenue
+Analytics &amp; Platform</h3>
+<h4 id="q5a-missed-revenue-7-day-lookback">Q5A — Missed Revenue (7-day
+lookback)</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;"><strong>~400ms</strong></td>
+<td style="text-align: center;">77,668ms (78 seconds)</td>
+</tr>
+<tr>
+<td><strong>Speedup</strong></td>
+<td style="text-align: center;"><strong>194x faster</strong></td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Head of Trading / CFO</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">How much money did we leave on the table
+this week?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>TimescaleDB Feature</strong></td>
+<td style="text-align: center;">1-hour CAGG + market join + FILTER
+aggregation</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Why RDS is slow</strong></td>
+<td style="text-align: center;">Aggregates 7 days of raw telemetry +
+market data — 78 seconds</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="q5b-platform-proof">Q5B — Platform Proof</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td style="text-align: center;">118ms</td>
+<td style="text-align: center;">102ms</td>
+</tr>
+<tr>
+<td><strong>Result</strong></td>
+<td style="text-align: center;">~equal</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>User</strong></td>
+<td style="text-align: center;">Solutions Engineer / DBA</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Question</strong></td>
+<td style="text-align: center;">Can the platform handle real-time writes
+AND analytics simultaneously?</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Note</strong></td>
+<td style="text-align: center;">System catalog metadata scan — equally
+fast on both</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="summary">Summary</h2>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 50%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: center;">Tiger Cloud</th>
+<th style="text-align: center;">RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Queries won</strong></td>
+<td style="text-align: center;"><strong>8 of 10</strong></td>
+<td style="text-align: center;">0 of 10 (2 ties)</td>
+</tr>
+<tr>
+<td><strong>Operational (Q1A)</strong></td>
+<td style="text-align: center;">~50ms</td>
+<td style="text-align: center;">9,499ms (<strong>190x
+slower</strong>)</td>
+</tr>
+<tr>
+<td><strong>Historical (Q2B)</strong></td>
+<td style="text-align: center;">~150ms</td>
+<td style="text-align: center;">67,450ms (<strong>450x
+slower</strong>)</td>
+</tr>
+<tr>
+<td><strong>Dashboard (Q3A/Q3B)</strong></td>
+<td style="text-align: center;">645-836ms</td>
+<td style="text-align: center;">40-43 seconds (<strong>52-62x
+slower</strong>)</td>
+</tr>
+<tr>
+<td><strong>Decisioning (Q4A/Q4B)</strong></td>
+<td style="text-align: center;">~100ms</td>
+<td style="text-align: center;">2-3 seconds (<strong>23-32x
+slower</strong>)</td>
+</tr>
+<tr>
+<td><strong>Revenue (Q5A)</strong></td>
+<td style="text-align: center;">~400ms</td>
+<td style="text-align: center;">77,668ms (<strong>194x
+slower</strong>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="storage-comparison">Storage Comparison</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Tiger Cloud</th>
+<th>RDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Database size</strong></td>
+<td>733 GB</td>
+<td>27 GB</td>
+</tr>
+<tr>
+<td><strong>Telemetry rows</strong></td>
+<td>~6.6 billion</td>
+<td>~89 million (74x fewer)</td>
+</tr>
+<tr>
+<td><strong>Bytes per row</strong></td>
+<td>~100 (compressed)</td>
+<td>~147 (uncompressed)</td>
+</tr>
+<tr>
+<td><strong>Compression</strong></td>
+<td>90%+ columnstore</td>
+<td>None</td>
+</tr>
+<tr>
+<td><strong>S3 tiering</strong></td>
+<td>After 3 months</td>
+<td>Not available</td>
+</tr>
+<tr>
+<td><strong>Retention</strong></td>
+<td>Automated (6 months)</td>
+<td>Manual (custom scripts)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="year-tco-at-3000-rowssec-eu-central-1">3-Year TCO at 3,000
+rows/sec (eu-central-1)</h2>
+<table>
+<thead>
+<tr>
+<th>Cost Component</th>
+<th style="text-align: center;">RDS Single-AZ</th>
+<th style="text-align: center;">RDS Multi-AZ</th>
+<th style="text-align: center;">% of Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compute (RI 3yr)</td>
+<td style="text-align: center;">$4,779</td>
+<td style="text-align: center;">$9,558</td>
+<td style="text-align: center;">3%</td>
+</tr>
+<tr>
+<td><strong>Storage (gp3)</strong></td>
+<td style="text-align: center;"><strong>$98,269</strong></td>
+<td style="text-align: center;"><strong>$196,538</strong></td>
+<td style="text-align: center;"><strong>67%</strong></td>
+</tr>
+<tr>
+<td>IOPS (15K provisioned)</td>
+<td style="text-align: center;">$10,368</td>
+<td style="text-align: center;">$20,736</td>
+<td style="text-align: center;">7%</td>
+</tr>
+<tr>
+<td>Backup (~50% of data)</td>
+<td style="text-align: center;">$34,071</td>
+<td style="text-align: center;">$34,071</td>
+<td style="text-align: center;">23%</td>
+</tr>
+<tr>
+<td>Data Transfer</td>
+<td style="text-align: center;">$159</td>
+<td style="text-align: center;">$159</td>
+<td style="text-align: center;">&lt;1%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align: center;"><strong>$147,646</strong></td>
+<td style="text-align: center;"><strong>$261,062</strong></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td><strong>Monthly average</strong></td>
+<td style="text-align: center;"><strong>$4,101/mo</strong></td>
+<td style="text-align: center;"><strong>$7,252/mo</strong></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key insight:</strong> Storage is 67% of the RDS bill. Tiger
+Cloud compression (90%+) reduces that by 10x. S3 tiering reduces it
+further.</p>
+<hr />
+<h2 id="what-rds-is-missing">What RDS is Missing</h2>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hypertables</td>
+<td>No automatic time partitioning — manual pg_partman setup
+required</td>
+</tr>
+<tr>
+<td>Continuous Aggregates</td>
+<td>No pre-computed rollups — every query scans raw data</td>
+</tr>
+<tr>
+<td>Columnstore Compression</td>
+<td>No storage savings — 147 bytes/row uncompressed</td>
+</tr>
+<tr>
+<td>S3 Tiering</td>
+<td>No cold data archival — all data on expensive gp3 SSD</td>
+</tr>
+<tr>
+<td>time_bucket()</td>
+<td>No native time-series aggregation — use date_trunc()</td>
+</tr>
+<tr>
+<td>Retention Policies</td>
+<td>No automated lifecycle — need pg_cron + custom scripts</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Tiger Cloud values marked as approximate (~) are expected
+performance under normal operation. Some measurements were disrupted by
+a one-time compression optimization (adding <code>asset_id</code> to
+<code>segmentby</code>). Values are based on prior measurements with the
+same queries.</li>
+<li>RDS has live ingest running 24/7 via Fly.io (bess-simulator-rds) at
+2,500 rows/sec + 12 simulated dashboard readers.</li>
+<li>Both databases are in eu-central-1 (Frankfurt) on matched or similar
+hardware specifications.</li>
+<li>Benchmark script: <code>benchmark/run-query-pack-v2.ts</code></li>
+<li>Query pack definition:
+<code>docs/bess_core_query_pack_v2.md</code></li>
+</ul>
+</body>
+</html>

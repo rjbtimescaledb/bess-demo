@@ -137,12 +137,12 @@ export default function PlatformPage() {
                   <span className="text-slate-600">Compress alarms/dispatch after <strong>7 days</strong></span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
-                  <span className="text-slate-600">Drop raw telemetry after <strong>90 days</strong></span>
+                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                  <span className="text-slate-600">Tier to <strong>S3 object storage</strong> after <strong>3 months</strong></span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-slate-400"></span>
-                  <span className="text-slate-600">Retain aggregates <strong>indefinitely</strong></span>
+                  <span className="text-slate-600">Retain all data <strong>indefinitely</strong> (no deletion)</span>
                 </div>
               </div>
             </div>
@@ -226,10 +226,10 @@ export default function PlatformPage() {
 │  ├── market_prices    → compress after 3 days    │
 │  └── maintenance_logs → compress after 30 days   │
 │                                                   │
-│  Retention Policies                               │
-│  ├── telemetry_raw    → drop after 90 days       │
-│  ├── alarms_events    → drop after 365 days      │
-│  └── market_prices    → drop after 365 days      │
+│  Data Lifecycle                                   │
+│  ├── telemetry_raw    → tier to S3 after 3 months│
+│  ├── All data         → retained indefinitely    │
+│  └── No deletion      → compliance + warranty    │
 │                                                   │
 └──────────────────────────────────────────────────┘`}</pre>
           </div>

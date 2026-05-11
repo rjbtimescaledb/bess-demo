@@ -105,7 +105,7 @@ export async function getTelemetryHistory(siteId: string, from?: string, to?: st
   let timeCol: string;
   let columns: string;
 
-  if (resolution === 'raw' || (!resolution && rangeHours <= 1)) {
+  if (resolution === 'raw' || (!resolution && rangeHours <= 0.25)) {
     table = 'telemetry_raw';
     timeCol = 'ts';
     columns = 'ts AS time, site_power_mw, charge_power_mw, discharge_power_mw, state_of_charge_pct, state_of_health_pct, round_trip_efficiency, inverter_temp_c, rack_temp_c, cell_voltage_avg, ambient_temp_c, grid_frequency_hz';

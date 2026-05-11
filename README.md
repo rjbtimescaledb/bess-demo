@@ -89,27 +89,41 @@ Open [http://localhost:3000](http://localhost:3000).
 
 The simulator runs as a separate always-on worker and generates:
 
-- **Telemetry**: Power output, SoC, temperatures, voltages, grid metrics
-- **Alarms**: Random fault events with severity levels
-- **Dispatch Commands**: Charge/discharge commands driven by market prices
-- **Market Prices**: LMP signals for CAISO, ERCOT, PJM
+- **Per-asset telemetry**: Each battery asset reports independently with rack-level temperature/voltage variation
+- **Alarms**: Fault events with severity levels, ~30% remain unresolved for realistic "active alarms"
+- **Dispatch Commands**: Charge/discharge commands with full lifecycle (pending → completed)
+- **Market Prices**: LMP signals for CAISO, ERCOT, PJM using correct local timezones
+- **Maintenance windows**: Assets periodically go offline for realistic maintenance periods
+- **Physics**: Time-based SoH degradation, per-asset SoC tracking, thermal correlation with load
 
 ### Simulation Modes
 
-| Mode | Interval | Batch Size | Use Case |
-|------|----------|------------|----------|
-| `small` | 10s | 50 | Local demos |
-| `large` | 2s | 200 | Production demos |
-| `terabyte` | 1s | 500 | Scale testing |
+| Mode | Interval | Rows/tick | Use Case |
+|------|----------|-----------|----------|
+| `small` | 10s | 16 (per-asset) | Local demos, ~1.6 rows/s |
+| `large` | 2s | 16 | Production demos, ~8 rows/s |
+| `terabyte` | 1s | 16 | Scale testing, ~16 rows/s |
 
-Set via `SIMULATION_MODE` env var.
+Set via `SIMULATION_MODE` env var. Override individual settings:
+
+```bash
+SIM_TELEMETRY_INTERVAL_MS=2000   # Override interval
+SIM_BATCH_SIZE=500               # Override batch size
+SIM_ALARM_PROBABILITY=0.01       # Override alarm rate
+SIM_PER_ASSET_TELEMETRY=true     # Per-asset rows (default: true)
+SIM_MAINTENANCE_PROBABILITY=0.02 # Asset maintenance rate
+```
 
 ### Backfill Historical Data
 
+Uses PostgreSQL COPY protocol for high throughput (~14K rows/s). Supports tiered resolution: dense recent data, coarser older data.
+
 ```bash
 cd simulator
-npm run backfill              # Default: 30 days
-npm run backfill -- --days 90 # Custom range
+npm run backfill              # 30 days
+npm run backfill:year         # 1 year
+npm run backfill:5yr          # 5 years (tiered resolution)
+npx tsx src/backfill.ts --days=90  # Custom range
 ```
 
 ## Deployment

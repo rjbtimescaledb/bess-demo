@@ -1,0 +1,21 @@
+app = 'bess-simulator'
+primary_region = 'fra'
+
+[build]
+  dockerfile = "Dockerfile"
+
+[processes]
+  writer = "npx tsx src/index.ts"
+  reader = "npx tsx src/loadtest-continuous.ts"
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  processes = ['writer']
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
+  processes = ['reader']

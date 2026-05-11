@@ -6,8 +6,10 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
-    "backfill": "tsx src/backfill.ts",
-    "backfill:large": "tsx src/backfill-large.ts"
+    "backfill": "tsx src/backfill.ts --days=30",
+    "backfill:year": "tsx src/backfill.ts --years=1",
+    "backfill:5yr": "tsx src/backfill.ts --years=5",
+    "loadtest": "tsx src/loadtest.ts"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
@@ -16,8 +18,10 @@
     "pg-copy-streams": "^7.0.0"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.7.10",
     "@types/node": "^22.0.0",
     "@types/pg": "^8.11.0",
+    "@types/pg-copy-streams": "^1.2.5",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
   }

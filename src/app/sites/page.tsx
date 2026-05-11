@@ -39,7 +39,7 @@ export default async function SitesPage() {
                 <td className="px-6 py-4 text-slate-600">{site.org_name}</td>
                 <td className="px-6 py-4">{site.capacity_mw} MW</td>
                 <td className="px-6 py-4">{site.capacity_mwh} MWh</td>
-                <td className="px-6 py-4 text-slate-600">{site.commissioned}</td>
+                <td className="px-6 py-4 text-slate-600">{site.commissioned ? new Date(site.commissioned).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : '-'}</td>
                 <td className="px-6 py-4">
                   <span className={cn('badge', site.status === 'operational' ? 'badge-online' : 'badge-offline')}>
                     {site.status}
