@@ -663,6 +663,19 @@ export async function getFleetUtilization(): Promise<{ data: FleetUtilizationRow
   return { data: serializeRows(res.rows), queryMs: res.duration };
 }
 
+// SoH Degradation Trend — per-site, variable time range
+export async function getSohTrend(siteId: string, days: number): Promise<{ data: { day: string; avg_soh: number }[]; queryMs: number }> {
+  // Use daily buckets from the 1-hour CAGG
+  const res = await query(`
+    SELECT date_trunc('day', bucket) AS day,
+      ROUND(AVG(avg_soh_pct)::numeric, 3) AS avg_soh
+    FROM telemetry_1hour
+    WHERE site_id = $1 AND bucket >= NOW() - make_interval(days => $2)
+    GROUP BY 1 ORDER BY 1
+  `, [siteId, days]);
+  return { data: serializeRows(res.rows), queryMs: res.duration };
+}
+
 export async function getMaintenanceLogs(siteId?: string, limit = 50): Promise<{ data: MaintenanceLog[]; queryMs: number }> {
   const conditions: string[] = [];
   const params: unknown[] = [];
